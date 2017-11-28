@@ -1,5 +1,5 @@
-#ifndef IMG_H
-#define IMG_H
+#ifndef BUFFER_H
+#define BUFFER_H
 
 #include <png.h>
 #include <stdint.h>

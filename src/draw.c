@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "img.h"
+#include "buffer.h"
+#include "math.h"
 #include "draw.h"
 
 void draw_clear(color_t c, uint8_t * buffer, point_t buffer_size) {
@@ -50,8 +51,20 @@ void draw_line(point_t start, point_t end, color_t c, uint8_t * buffer, point_t 
 	}
 }
 
-void draw_triangle(point_t p[3], color_t c, uint8_t * buffer, point_t buffer_size) {
-	draw_line(p[0], p[1], c, buffer, buffer_size);
-	draw_line(p[1], p[2], c, buffer, buffer_size);
-	draw_line(p[2], p[0], c, buffer, buffer_size);
+void draw_triangle_frame(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size) {
+	draw_line(t[0], t[1], c, buffer, buffer_size);
+	draw_line(t[1], t[2], c, buffer, buffer_size);
+	draw_line(t[2], t[0], c, buffer, buffer_size);
+}
+
+void draw_triangle(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size) {
+	bbox_t bbox = find_bbox(t, 3);
+	for (int y = bbox.min.y; y <= bbox.max.y; y++) {
+		for (int x = bbox.min.x; x <= bbox.max.x; x++) {
+			point_t p = make_point(x, y);
+			if (is_point_in_triangle(p, t)) {
+				draw_point(p, c, buffer, buffer_size);
+			}
+		}
+	}
 }

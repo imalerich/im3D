@@ -24,6 +24,11 @@ void draw_line(point_t start, point_t end, color_t c, uint8_t * buffer, point_t 
 /**
  * Draws a wireframe triangle composed of the input 3 points using the given color.
  */
-void draw_triangle(point_t p[3], color_t c, uint8_t * buffer, point_t buffer_size);
+void draw_triangle_frame(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size);
+
+/**
+ * Draws a filled in triangle at the given 3 input points using the given color.
+ */
+void draw_triangle(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size);
 
 #endif

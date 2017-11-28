@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "img.h"
+#include "buffer.h"
 
 uint8_t * malloc_buffer(unsigned width, unsigned height) {
 	return malloc(sizeof(uint8_t) * width * height * CHANNELS);

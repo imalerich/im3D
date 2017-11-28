@@ -1,5 +1,5 @@
-SRC = src/main.c src/img.c src/color.c src/point.c src/draw.c
-HEAD = src/img.h src/color.h src/point.h src/draw.h
+SRC = src/main.c src/buffer.c src/color.c src/point.c src/draw.c src/math.c
+HEAD = src/buffer.h src/color.h src/point.h src/draw.h src/math.h
 
 all: build
 

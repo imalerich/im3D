@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "img.h"
+#include "buffer.h"
 #include "color.h"
 #include "point.h"
 #include "draw.h"
@@ -24,7 +24,8 @@ int main(int argc, char ** argv) {
 		make_point(770, 280)
 	};
 
-	draw_triangle(p, RED, buffer, SIZE);
+	draw_triangle(p, BLUE, buffer, SIZE);
+	draw_triangle_frame(p, RED, buffer, SIZE);
 
 	save_img("out.png", buffer, WIDTH, HEIGHT);
 	return 0;
