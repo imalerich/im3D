@@ -12,6 +12,8 @@ bbox_t find_bbox(point_t * points, unsigned count) {
 		max.x = MAX(max.x, points[i].x); 
 		max.y = MAX(max.y, points[i].y);
 	}
+
+	return (bbox_t){min, max};
 }
 
 bool is_point_in_triangle(point_t p, point_t t[3]) {
