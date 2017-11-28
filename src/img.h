@@ -1,7 +1,10 @@
+#ifndef IMG_H
+#define IMG_H
+
 #include <png.h>
 #include <stdint.h>
 
-#define CHANNELS	3
+#define CHANNELS 3
 
 /**
  * Allocates a new image buffer for the given dimmensions.
@@ -17,3 +20,5 @@ uint8_t * malloc_buffer(unsigned width, unsigned height);
  * Buffer is assumed to have 3 channels, RGB.
  */
 void save_img(const char * name, uint8_t * buffer, unsigned width, unsigned height);
+
+#endif
