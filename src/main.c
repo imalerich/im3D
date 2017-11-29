@@ -25,7 +25,6 @@ int main(int argc, char ** argv) {
 	};
 
 	draw_triangle(p, BLUE, buffer, SIZE);
-	draw_triangle_frame(p, RED, buffer, SIZE);
 
 	save_img("out.png", buffer, WIDTH, HEIGHT);
 	return 0;
