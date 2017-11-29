@@ -5,14 +5,10 @@
 
 typedef struct model {
 	// stores information about the vertex buffer
-	unsigned vert_count;
-	vector_t * vertices;
-	vector_t * tex_coords; // each vertex has texture coordinates
+	unsigned vert_count; // multiple of 3, vert_count/3 = face_count
+	vector_t * vertices; // each set of 3 consecutive 3 vertices forms a triangle
+	coord_t * tex_coords; // each vertex has texture coordinates
 	vector_t * norms; // each vertex has a normal
-
-	// each set of 3 indecies forms a triangle
-	unsigned index_count;
-	unsigned * indecies;
 } model_t;
 
 /**
@@ -25,5 +21,17 @@ model_t obj_load(const char * filename);
  * Frees all memory associated with the input model.
  */
 void model_free(model_t m);
+
+/**
+ * Returns the number of faces stored in the given model.
+ */
+static inline unsigned num_faces(model m) {
+	return m.vert_count / 3;
+}
+
+/**
+ * Outputs a list of all vertices for the given model.
+ */
+void model_print(model_t m);
 
 #endif

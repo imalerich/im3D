@@ -3,7 +3,9 @@
 
 #include <stdbool.h>
 #include <math.h>
+
 #include "point.h"
+#include "matrix.h"
 
 #define MIN(a, b) (a < b ? a : b)
 #define MAX(a, b) (a > b ? a : b)
@@ -12,12 +14,6 @@ typedef struct bbox {
 	point_t min;
 	point_t max;
 } bbox_t;
-
-typedef struct vector3 {
-	float x;
-	float y;
-	float z;
-} vector3_t;
 
 /**
  * Computes the 2D bounding box on the set of input points.

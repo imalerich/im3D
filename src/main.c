@@ -7,6 +7,7 @@
 #include "color.h"
 #include "point.h"
 #include "draw.h"
+#include "math.h"
 
 const unsigned WIDTH = 1366;
 const unsigned HEIGHT = 768;
