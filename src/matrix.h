@@ -108,6 +108,11 @@ matrix_t mat_trans_rot(vector_t axis, float theta);
 matrix_t mat_trans_translate(vector_t trans);
 
 /**
+ * Creates a projection matrix with the given near plane distance.
+ */
+matrix_t mat_proj(float near);
+
+/**
  * Reads a row of the input matrix and returns it as a vector.
  */
 vector_t get_row(matrix_t * m, unsigned row);

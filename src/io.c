@@ -74,6 +74,14 @@ vector_t get_vertex_norm(char * line) {
 	return make_vector(x, y, z, 0.0);
 }
 
+// utility for get_face
+// decrements indecies from 1 based to 0 based
+obj_vert_t obj_vert_decrement(obj_vert_t o) {
+	return (obj_vert_t){
+		o.v - 1, o.t - 1, o.n - 1
+	};
+}
+
 obj_face_t get_face(char * line) {
 	// skip the line header
 	while (isspace(*line) || *line == 'f') { ++line; }
@@ -84,6 +92,12 @@ obj_face_t get_face(char * line) {
 		&ret.b.v, &ret.b.t, &ret.b.n,
 		&ret.c.v, &ret.c.t, &ret.c.n
 	);
+
+	// given indecies are 1 based, convert them to 0 based
+	ret.a = obj_vert_decrement(ret.a);
+	ret.b = obj_vert_decrement(ret.b);
+	ret.c = obj_vert_decrement(ret.c);
+
 	return ret;
 }
 

@@ -83,6 +83,12 @@ matrix_t mat_trans_translate(vector_t trans) {
 	return m;
 }
 
+matrix_t mat_proj(float near) {
+	matrix_t m = mat_identity();
+	mat_set_val(&m, 3, 2, -1.0/near);
+	return m;
+}
+
 vector_t get_col(matrix_t * m, unsigned col) {
 	return make_vector(
 		m->data[col + 0 * MAT_DIMM],

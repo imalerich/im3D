@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+#include <math.h>
+
 #define POINT_ZERO make_point(0, 0)
 #define VECTOR_ZERO make_vector(0, 0, 0, 0)
 
@@ -43,11 +45,36 @@ static inline coord_t make_coords(float u, float v) {
 }
 
 /**
- * Constructs a vectory representations of 
- * the input coordinate.
+ * Constructs a vector representation of the input point.
  */
 static inline vector_t point_to_vector(point_t p) {
 	return (vector_t){(float)p.x, (float)p.y, 0.0, 0.0};
+}
+
+/**
+ * Constructs a point representation of the input vector.
+ */
+static inline point_t vector_to_point(vector_t v) {
+	return (point_t){(int)lroundf(v.x), (int)lroundf(v.y)};
+}
+
+/**
+ * Perform vector vector addition.
+ */
+static inline vector_t vector_add(vector_t v0, vector_t v1) {
+	return make_vector(
+		v0.x + v1.x, 
+		v0.y + v1.y,
+		v0.z + v1.z,
+		v0.w + v1.w
+	);
+}
+
+/**
+ * Perform vector scalar multiplication.
+ */
+static inline vector_t vector_scale(vector_t v, float s) {
+	return make_vector(v.x * s, v.y * s, v.z * s, v.w * s);
 }
 
 /**
@@ -80,8 +107,13 @@ vector_t vec_cross(vector_t v1, vector_t v2);
 void print_vector(vector_t v);
 
 /**
- * Prints a vector to the standard output, does not include a new line.
+ * Prints a coord to the standard output, does not include a new line.
  */
 void print_coord(coord_t c);
+
+/**
+ * Prints a point to the standard output, does not include a new line.
+ */
+void print_point(point_t p);
 
 #endif

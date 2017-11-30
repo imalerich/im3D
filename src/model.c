@@ -67,7 +67,6 @@ model_t obj_load(const char * filename) {
 	// create a new model, we need to allocate new buffers in this model
 	// but they don't need to be dynamic as we already know how many faces we have
 	size_t num_vertices = f_count * 3;
-	fprintf(stderr, "num_vertices: %d\n", num_vertices);
 	model_t m = (model_t){
 		num_vertices, 
 		malloc(sizeof(vector_t) * num_vertices), 

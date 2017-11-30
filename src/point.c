@@ -27,9 +27,13 @@ vector_t vec_cross(vector_t v1, vector_t v2) {
 }
 
 void print_vector(vector_t v) {
-	printf("[%.2f %.2f %.2f]", v.x, v.y, v.z);
+	printf("[%.2f %.2f %.2f %.2f]", v.x, v.y, v.z, v.w);
 }
 
 void print_coord(coord_t c) {
 	printf("[%.2f %.2f]", c.u, c.v);
+}
+
+void print_point(point_t p) {
+	printf("<%d %d>", p.x, p.y);
 }

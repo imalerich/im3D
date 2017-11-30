@@ -15,7 +15,8 @@ void draw_clear(color_t c, uint8_t * buffer, point_t buffer_size) {
 }
 
 void draw_point(point_t coords, color_t c, uint8_t * buffer, point_t buffer_size) {
-	if (coords.x >= buffer_size.x || coords.y >= buffer_size.y) {
+	if (coords.x >= buffer_size.x || coords.y >= buffer_size.y ||
+			coords.x < 0 || coords.y < 0) {
 		// out of bounds - silently fail
 		return;
 	}
