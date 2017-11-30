@@ -70,6 +70,44 @@ static inline matrix_t mat_rand() {
 }
 
 /**
+ * Creates a transformation which scales a vector by scalar s.
+ */
+matrix_t mat_trans_scale(float s);
+
+/**
+ * Creates a transformation matrix representing a rotationg
+ * about the x-axis by angle theta (radians).
+ */
+matrix_t mat_trans_x_rot(float theta);
+
+/**
+ * Creates a transformation matrix representing a rotationg
+ * about the y-axis by angle theta (radians).
+ */
+matrix_t mat_trans_y_rot(float theta);
+
+/**
+ * Creates a transformation matrix representing a rotationg
+ * about the z-axis by angle theta (radians).
+ */
+matrix_t mat_trans_z_rot(float theta);
+
+/**
+ * Creates a transformation matrix representing a rotation 
+ * about the input axis by angle theta (radians). 
+ * This axis need not be a unit vector as it will be normalized 
+ * by this function.
+ */
+matrix_t mat_trans_rot(vector_t axis, float theta);
+
+/**
+ * Creates a transformation matrix representation a 
+ * translation by the given vector trans. Note
+ * the w component of this input vector will be ignored.
+ */
+matrix_t mat_trans_translate(vector_t trans);
+
+/**
  * Reads a row of the input matrix and returns it as a vector.
  */
 vector_t get_row(matrix_t * m, unsigned row);
@@ -83,6 +121,17 @@ vector_t get_col(matrix_t * m, unsigned col);
  * Multiplies the two input matrices and returns the result.
  */
 matrix_t mat_multiply(matrix_t * m0, matrix_t * m1);
+
+/**
+ * Creates a new matrix, who's values are equal to
+ * corresponding values in m0 multiplied by s.
+ */
+matrix_t mat_scalar_multiply(matrix_t * m0, float s);
+
+/**
+ * Performs matrix-vector multiplication and returns the result.
+ */
+vector_t mat_vec_multiply(matrix_t * m, vector_t v);
 
 /**
  * Debug utility, prints the input matrix to stdout.
