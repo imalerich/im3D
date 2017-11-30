@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "buffer.h"
+#include "model.h"
 #include "color.h"
 #include "point.h"
 #include "draw.h"
@@ -15,6 +16,11 @@ const unsigned HEIGHT = 768;
 
 int main(int argc, char ** argv) {
 	srand(time(NULL));
+
+	model_t cube = obj_load("models/cube.obj");
+	printf("cube.vert_count: %d\n", cube.vert_count);
+	model_print(cube);
+
 	uint8_t * buffer = malloc_buffer(WIDTH, HEIGHT);
 
 	draw_clear(BLACK, buffer, SIZE);

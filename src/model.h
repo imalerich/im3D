@@ -25,7 +25,7 @@ void model_free(model_t m);
 /**
  * Returns the number of faces stored in the given model.
  */
-static inline unsigned num_faces(model m) {
+static inline unsigned num_faces(model_t m) {
 	return m.vert_count / 3;
 }
 

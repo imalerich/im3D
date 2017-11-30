@@ -15,7 +15,7 @@ void strip_comments(char * line) {
 
 bool is_vertex(char * line) {
 	char init = get_initial_char(line++);
-	char last = get_initial_char(line);
+	char last = *line;
 
 	// a vertex takes the form "v "
 	return init == 'v' && isspace(last);
@@ -23,8 +23,8 @@ bool is_vertex(char * line) {
 
 bool is_texture_coord(char * line) {
 	char init = get_initial_char(line++);
-	char next = get_initial_char(line++);
-	char last = get_initial_char(line);
+	char next = *line++;
+	char last = *line;
 
 	// a texture coordinate takes the form "vt "
 	return init == 'v' && next == 't' && isspace(last);
@@ -32,8 +32,8 @@ bool is_texture_coord(char * line) {
 
 bool is_vertex_norm(char * line) {
 	char init = get_initial_char(line++);
-	char next = get_initial_char(line++);
-	char last = get_initial_char(line);
+	char next = *line++;
+	char last = *line;
 
 	// a vertex normal takes the form "vn "
 	return init == 'v' && next == 'n' && isspace(last);
@@ -41,10 +41,10 @@ bool is_vertex_norm(char * line) {
 
 bool is_face(char * line) {
 	char init = get_initial_char(line++);
-	char last = get_initial_char(line);
+	char last = *line++;
 
-	// a vertex takes the form "v "
-	return init == 'n' && isspace(last);
+	// a face takes the form "f "
+	return init == 'f' && isspace(last);
 }
 
 vector_t get_vertex(char * line) {
@@ -52,7 +52,7 @@ vector_t get_vertex(char * line) {
 	while (isspace(*line) || *line == 'v') { ++line; }
 
 	float x, y, z;
-	sscanf(line, "%f %f %f", x, y, z);
+	sscanf(line, "%f %f %f", &x, &y, &z);
 	return make_vector(x, y, z, 1.0);
 }
 
@@ -61,7 +61,7 @@ coord_t get_texture_coord(char * line) {
 	while (isspace(*line) || *line == 'v' || *line == 't') { ++line; }
 
 	float u, v;
-	sscanf(line, "%f %f", u, v);
+	sscanf(line, "%f %f", &u, &v);
 	return make_coords(u, v);
 }
 
@@ -70,19 +70,19 @@ vector_t get_vertex_norm(char * line) {
 	while (isspace(*line) || *line == 'v' || *line == 'n') { ++line; }
 
 	float x, y, z;
-	sscanf(line, "%f %f %f", x, y, z);
+	sscanf(line, "%f %f %f", &x, &y, &z);
 	return make_vector(x, y, z, 0.0);
 }
 
 obj_face_t get_face(char * line) {
 	// skip the line header
-	while (isspace(*line) || *line == 'h') { ++line; }
+	while (isspace(*line) || *line == 'f') { ++line; }
 	obj_face_t ret;
 
-	sscanf(line, "%d %d %d  %d %d %d  %d %d %d",
-		ret.a.v, ret.a.t, ret.a.n,
-		ret.b.v, ret.b.t, ret.b.n,
-		ret.c.v, ret.c.t, ret.c.n
+	sscanf(line, "%d/%d/%d %d/%d/%d %d/%d/%d",
+		&ret.a.v, &ret.a.t, &ret.a.n,
+		&ret.b.v, &ret.b.t, &ret.b.n,
+		&ret.c.v, &ret.c.t, &ret.c.n
 	);
 	return ret;
 }
@@ -96,4 +96,12 @@ char get_initial_char(char * line) {
 	}
 
 	return '\0';
+}
+
+void obj_face_print(obj_face_t face) {
+	printf("%d/%d/%d %d/%d/%d %d/%d/%d\n",
+		face.a.v, face.a.t, face.a.n,
+		face.b.v, face.b.t, face.b.n,
+		face.c.v, face.c.t, face.c.n
+	);
 }

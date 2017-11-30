@@ -84,4 +84,9 @@ obj_face_t get_face(char * line);
  */
 char get_initial_char(char * line);
 
+/**
+ * Prints a face to stdout as it would appear in a .obj file.
+ */
+void obj_face_print(obj_face_t face);
+
 #endif

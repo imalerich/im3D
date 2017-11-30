@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "model.h"
+#include "io.h"
 
 model_t obj_load(const char * filename) {
 	FILE * fp = fopen(filename, "r");
@@ -8,13 +10,13 @@ model_t obj_load(const char * filename) {
 
 	// allocate empty buffers.
 	size_t v_count = 0, v_buffer_size = 8;
-	vertex_t * v_buffer = malloc(sizeof(vertex_t) * v_buffer_size);
+	vector_t * v_buffer = malloc(sizeof(vector_t) * v_buffer_size);
 
 	size_t t_count = 0, t_buffer_size = 8;
 	coord_t * t_buffer = malloc(sizeof(coord_t) * t_buffer_size);
 
 	size_t n_count = 0, n_buffer_size = 8;
-	vertex_t * n_buffer = malloc(sizeof(vertex_t) * n_buffer_size);
+	vector_t * n_buffer = malloc(sizeof(vector_t) * n_buffer_size);
 
 	size_t f_count = 0, f_buffer_size = 8;
 	obj_face_t * f_buffer = malloc(sizeof(obj_face_t) * f_buffer_size);
@@ -43,7 +45,7 @@ model_t obj_load(const char * filename) {
 
 		if (v_count == v_buffer_size) {
 			v_buffer_size *= 2;
-			v_buffer = realloc(v_buffer, sizeof(vertex_t) * v_buffer_size);
+			v_buffer = realloc(v_buffer, sizeof(vector_t) * v_buffer_size);
 		}
 
 		if (t_count == t_buffer_size) {
@@ -53,7 +55,7 @@ model_t obj_load(const char * filename) {
 
 		if (n_count == n_buffer_size) {
 			n_buffer_size *= 2;
-			n_buffer = realloc(n_buffer, sizeof(vertex_t) * n_buffer_size);
+			n_buffer = realloc(n_buffer, sizeof(vector_t) * n_buffer_size);
 		}
 
 		if (f_count == f_buffer_size) {
@@ -65,6 +67,7 @@ model_t obj_load(const char * filename) {
 	// create a new model, we need to allocate new buffers in this model
 	// but they don't need to be dynamic as we already know how many faces we have
 	size_t num_vertices = f_count * 3;
+	fprintf(stderr, "num_vertices: %d\n", num_vertices);
 	model_t m = (model_t){
 		num_vertices, 
 		malloc(sizeof(vector_t) * num_vertices), 
@@ -83,7 +86,7 @@ model_t obj_load(const char * filename) {
 		m.vertices[idx] = v_buffer[face.a.v];
 		m.tex_coords[idx] = t_buffer[face.a.t];
 		m.norms[idx] = n_buffer[face.a.n];
-		idx++
+		idx++;
 
 		// FACE B
 		m.vertices[idx] = v_buffer[face.b.v];
@@ -119,12 +122,12 @@ void model_free(model_t m) {
 
 void model_print(model_t m) {
 	for (int i=0; i<m.vert_count; i++) {
-		pritnf("[");
+		printf("[");
 		print_vector(m.vertices[i]);
-		printf(" ");
+		printf("\t");
 		print_coord(m.tex_coords[i]);
-		printf(" ");
+		printf("\t");
 		print_vector(m.norms[i]);
-		pritnf("]\n");
+		printf("]\n");
 	}
 }
