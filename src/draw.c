@@ -58,13 +58,37 @@ void draw_triangle_frame(point_t t[3], color_t c, uint8_t * buffer, point_t buff
 	draw_line(t[2], t[0], c, buffer, buffer_size);
 }
 
-void draw_triangle(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size) {
-	bbox_t bbox = find_bbox(t, 3);
+void draw_triangle(model_t * m, unsigned idx, 
+		vector_t (*shader)(shader_data_t data),
+		uint8_t * buffer, float * back, point_t buffer_size) {
+	// get all relavent data out of the model
+	vector_t * vertices = &m->vertices[3*idx];
+	vector_t * tex_coords = &m->tex_coords[3*idx];
+	vector_t * norms = &m->norms[3*idx];
+
+	bbox_t bbox = find_bbox(vertices, 3);
 	for (int y = bbox.min.y; y <= bbox.max.y; y++) {
 		for (int x = bbox.min.x; x <= bbox.max.x; x++) {
-			point_t p = make_point(x, y);
-			if (is_point_in_triangle(p, t)) {
-				draw_point(p, c, buffer, buffer_size);
+			vector_t pos = make_vector(x, y, 0, 0);
+
+			if (is_point_in_triangle(pos, vertices)) {
+				// compute bary centric coordinates, we will need this for our depth test
+				vector_t bc_screen = bary_centric(make_vector(x,y, 0.0, 0.0), vertices);
+				if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0) { continue; }
+				pos.z = (vertices[0].z * bc_screen.x) + 
+					(vertices[1].z * bc_screen.y) + (vertices[2].z * bc_screen.z);
+
+				if (back[y*buffer_size.x + x] >= pos.z) {
+					continue;
+				}
+
+				// interpolate vertex data
+				vector_t tex_coord = interpolate(tex_coords, bc_screen);
+				vector_t norm = interpolate(norms, bc_screen);
+
+				back[y*buffer_size.x + x] = pos.z;
+				vector_t c = shader((shader_data_t){pos, tex_coord, norm});
+				draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
 			}
 		}
 	}

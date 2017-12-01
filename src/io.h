@@ -62,7 +62,7 @@ vector_t get_vertex(char * line);
  * Returns the texture coordinate stored
  * in the given line.
  */
-coord_t get_texture_coord(char * line);
+vector_t get_texture_coord(char * line);
 
 /**
  * Assumes is_vertex_norm(line) == true. This

@@ -56,13 +56,13 @@ vector_t get_vertex(char * line) {
 	return make_vector(x, y, z, 1.0);
 }
 
-coord_t get_texture_coord(char * line) {
+vector_t get_texture_coord(char * line) {
 	// skip the line header
 	while (isspace(*line) || *line == 'v' || *line == 't') { ++line; }
 
 	float u, v;
 	sscanf(line, "%f %f", &u, &v);
-	return make_coords(u, v);
+	return make_vector(u, v, 0.0, 0.0);
 }
 
 vector_t get_vertex_norm(char * line) {

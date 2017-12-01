@@ -17,9 +17,15 @@ const unsigned HEIGHT = 768;
 int main(int argc, char ** argv) {
 	srand(time(NULL));
 
+	// --- SETUP --- //
+
 	uint8_t * buffer = malloc_buffer(WIDTH, HEIGHT);
-	model_t cube = obj_load("models/monkey.obj");
+	float * back_buffer = malloc_back_buffer(WIDTH, HEIGHT);
+
+	model_t cube = obj_load("models/fox.obj");
 	matrix_t proj = mat_proj(1.0);
+
+	// --- RENDER --- //
 
 	draw_clear(BLACK, buffer, SIZE);
 
@@ -44,15 +50,18 @@ int main(int argc, char ** argv) {
 			v[i].y = v[i].y * HEIGHT;
 		}
 
-		point_t p[3] = {
-			vector_to_point(v[0]),
-			vector_to_point(v[1]),
-			vector_to_point(v[2])
-		};
+		cube.vertices[3*i + 0] = v[0];
+		cube.vertices[3*i + 1] = v[1];
+		cube.vertices[3*i + 2] = v[2];
 
-		draw_triangle(p, colors[rand() % 7], buffer, SIZE);
+		draw_triangle(&cube, i, simple_shader, buffer, back_buffer, SIZE);
 	}
 
+	// --- OUTPUT & CLEANUP --- //
+
 	save_img("out.png", buffer, WIDTH, HEIGHT);
+	free(buffer);
+	free(back_buffer);
+	model_free(cube);
 	return 0;
 }

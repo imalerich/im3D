@@ -13,7 +13,7 @@ model_t obj_load(const char * filename) {
 	vector_t * v_buffer = malloc(sizeof(vector_t) * v_buffer_size);
 
 	size_t t_count = 0, t_buffer_size = 8;
-	coord_t * t_buffer = malloc(sizeof(coord_t) * t_buffer_size);
+	vector_t * t_buffer = malloc(sizeof(vector_t) * t_buffer_size);
 
 	size_t n_count = 0, n_buffer_size = 8;
 	vector_t * n_buffer = malloc(sizeof(vector_t) * n_buffer_size);
@@ -50,7 +50,7 @@ model_t obj_load(const char * filename) {
 
 		if (t_count == t_buffer_size) {
 			t_buffer_size *= 2;
-			t_buffer = realloc(t_buffer, sizeof(coord_t) * t_buffer_size);
+			t_buffer = realloc(t_buffer, sizeof(vector_t) * t_buffer_size);
 		}
 
 		if (n_count == n_buffer_size) {
@@ -70,7 +70,7 @@ model_t obj_load(const char * filename) {
 	model_t m = (model_t){
 		num_vertices, 
 		malloc(sizeof(vector_t) * num_vertices), 
-		malloc(sizeof(coord_t) * num_vertices), 
+		malloc(sizeof(vector_t) * num_vertices), 
 		malloc(sizeof(vector_t) * num_vertices)
 	};
 
@@ -124,7 +124,7 @@ void model_print(model_t m) {
 		printf("[");
 		print_vector(m.vertices[i]);
 		printf("\t");
-		print_coord(m.tex_coords[i]);
+		print_vector(m.tex_coords[i]);
 		printf("\t");
 		print_vector(m.norms[i]);
 		printf("]\n");

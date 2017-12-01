@@ -1,8 +1,10 @@
 #ifndef DRAW_H
 #define DRAW_H
 
+#include "shaders.h"
 #include "color.h"
 #include "point.h"
+#include "model.h"
 
 /**
  * Clears the input buffer to the given color.
@@ -27,8 +29,11 @@ void draw_line(point_t start, point_t end, color_t c, uint8_t * buffer, point_t 
 void draw_triangle_frame(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size);
 
 /**
- * Draws a filled in triangle at the given 3 input points using the given color.
+ * Draws a single triangle from the given mesh at the given face index.
+ * Assumes vertices have already been transformed.
  */
-void draw_triangle(point_t t[3], color_t c, uint8_t * buffer, point_t buffer_size);
+void draw_triangle(model_t * m, unsigned idx, 
+	vector_t (*shader)(shader_data_t data),
+	uint8_t * buffer, float * back, point_t buffer_size);
 
 #endif

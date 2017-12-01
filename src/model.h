@@ -7,7 +7,7 @@ typedef struct model {
 	// stores information about the vertex buffer
 	unsigned vert_count; // multiple of 3, vert_count/3 = face_count
 	vector_t * vertices; // each set of 3 consecutive 3 vertices forms a triangle
-	coord_t * tex_coords; // each vertex has texture coordinates
+	vector_t * tex_coords; // each vertex has texture coordinates
 	vector_t * norms; // each vertex has a normal
 } model_t;
 

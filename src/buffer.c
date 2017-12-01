@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
 #include "buffer.h"
 
 uint8_t * malloc_buffer(unsigned width, unsigned height) {
 	return malloc(sizeof(uint8_t) * width * height * CHANNELS);
+}
+
+float * malloc_back_buffer(unsigned width, unsigned height) {
+	float * buffer = malloc(sizeof(float) * width * height);
+	for (int i=0; i<width*height; i++) { buffer[i] = -FLT_MAX; }
+	return buffer;
 }
 
 void save_img(const char * name, uint8_t * buffer, unsigned width, unsigned height) {

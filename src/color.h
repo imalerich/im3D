@@ -30,4 +30,12 @@ static inline color_t make_color(uint8_t r, uint8_t g, uint8_t b) {
 	return (color_t){r, g, b};
 }
 
+
+/**
+ * Converts the vector data type to an integer color type.
+ */
+static inline color_t vector_to_color(vector_t v) {
+	return (color_t){(uint8_t)(v.x * 255), (uint8_t)(v.y * 255), (uint8_t)(v.z * 255)};
+}
+
 #endif

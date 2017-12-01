@@ -7,11 +7,17 @@
 #define CHANNELS 3
 
 /**
- * Allocates a new image buffer for the given dimmensions.
+ * Allocates a new image buffer for the given dimensions.
  * This image will have CHANNELS uint8_t values for each
  * pixel for an RGB encoding.
  */
 uint8_t * malloc_buffer(unsigned width, unsigned height);
+
+/**
+ * Allocates a new back buffer for the given dimensions.
+ * This will allocate an array of width*height floating point values.
+ */
+float * malloc_back_buffer(unsigned width, unsigned height);
 
 /**
  * Saves a new png file at the given 'name' using
