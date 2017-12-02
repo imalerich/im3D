@@ -66,7 +66,11 @@ void draw_triangle(model_t * m, unsigned idx,
 	vector_t * tex_coords = &m->tex_coords[3*idx];
 	vector_t * norms = &m->norms[3*idx];
 
+	// get the bounding box, clamped to screen coordinates
+	bbox_t screen_box = (bbox_t){{0, 0},buffer_size};
 	bbox_t bbox = find_bbox(vertices, 3);
+	bbox = intersect_bbox(bbox, screen_box);
+
 	for (int y = bbox.min.y; y <= bbox.max.y; y++) {
 		for (int x = bbox.min.x; x <= bbox.max.x; x++) {
 			vector_t pos = make_vector(x, y, 0, 0);

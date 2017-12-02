@@ -18,6 +18,21 @@ bbox_t find_bbox(vector_t * v, unsigned count) {
 	return (bbox_t){min, max};
 }
 
+bbox_t intersect_bbox(bbox_t b0, bbox_t b1) {
+	return (bbox_t){
+		{MAX(b0.min.x, b1.min.x), MAX(b0.min.y, b1.min.y)},
+		{MIN(b0.max.x, b1.max.x), MIN(b0.max.y, b1.max.y)}
+	};
+}
+
+void print_bbox(bbox_t b) {
+	printf("[ min: ");
+	print_point(b.min);
+	printf(", max: ");
+	print_point(b.max);
+	printf(" ]\n");
+}
+
 bool is_point_in_triangle(vector_t p, vector_t t[3]) {
 	vector_t bc = bary_centric(p, t);
 	return bc.x >= 0 & bc.y >= 0 && bc.z >= 0;

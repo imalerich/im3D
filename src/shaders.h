@@ -1,9 +1,15 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
+#include "buffer.h"
 #include "point.h"
 #include "model.h"
 #include "math.h"
+
+#define MAX_TEXTURES 10
+
+// define a list of textures available to shaders
+extern image_t s_tex[MAX_TEXTURES];
 
 typedef struct shader_data {
 	vector_t pos;

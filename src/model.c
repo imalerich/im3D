@@ -109,14 +109,14 @@ model_t obj_load(const char * filename) {
 	return m;
 }
 
-void model_free(model_t m) {
-	free(m.vertices);
-	free(m.tex_coords);
-	free(m.norms);
+void model_free(model_t * m) {
+	free(m->vertices);
+	free(m->tex_coords);
+	free(m->norms);
 
-	m.vertices = NULL;
-	m.tex_coords = NULL;
-	m.norms = NULL;
+	m->vertices = NULL;
+	m->tex_coords = NULL;
+	m->norms = NULL;
 }
 
 void model_print(model_t m) {

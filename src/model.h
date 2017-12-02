@@ -20,7 +20,7 @@ model_t obj_load(const char * filename);
 /**
  * Frees all memory associated with the input model.
  */
-void model_free(model_t m);
+void model_free(model_t * m);
 
 /**
  * Returns the number of faces stored in the given model.

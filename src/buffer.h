@@ -1,10 +1,16 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include <png.h>
 #include <stdint.h>
+#include "point.h"
 
 #define CHANNELS 3
+
+typedef struct image {
+	int width;
+	int height;
+	uint8_t * data;
+} image_t;
 
 /**
  * Allocates a new image buffer for the given dimensions.
@@ -26,5 +32,28 @@ float * malloc_back_buffer(unsigned width, unsigned height);
  * Buffer is assumed to have 3 channels, RGB.
  */
 void save_img(const char * name, uint8_t * buffer, unsigned width, unsigned height);
+
+/**
+ * Loads an image from the input file. Image will be forced
+ * to use CHANNELS. The image loading library used by this 
+ * method loads into 'unsigned char', on most systems, this
+ * is equivalent to uint8_t used by my code, however this
+ * method will explicitly convert between the two.
+ */
+image_t load_img(const char * name);
+
+/**
+ * Free data associated with the input image.
+ */
+void free_img(image_t * img);
+
+/**
+ * Given two input texture coordinates x and y (normalized), scale
+ * them by the image size then round them to their
+ * nearest integer values, then sample data from the input image.
+ * The texture will tile for out of bound indecies.
+ * Return the sampled color in vector format.
+ */
+vector_t sample_nearest(image_t img, float x, float y);
 
 #endif

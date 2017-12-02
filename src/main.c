@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "shaders.h"
 #include "buffer.h"
 #include "model.h"
 #include "color.h"
@@ -22,7 +23,8 @@ int main(int argc, char ** argv) {
 	uint8_t * buffer = malloc_buffer(WIDTH, HEIGHT);
 	float * back_buffer = malloc_back_buffer(WIDTH, HEIGHT);
 
-	model_t cube = obj_load("models/fox.obj");
+	model_t cube = obj_load("models/plane.obj");
+	s_tex[0] = load_img("tex/inferno.jpg");
 	matrix_t proj = mat_proj(1.0);
 
 	// --- RENDER --- //
@@ -62,6 +64,7 @@ int main(int argc, char ** argv) {
 	save_img("out.png", buffer, WIDTH, HEIGHT);
 	free(buffer);
 	free(back_buffer);
-	model_free(cube);
+	free_img(&s_tex[0]);
+	model_free(&cube);
 	return 0;
 }

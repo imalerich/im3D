@@ -30,7 +30,6 @@ static inline color_t make_color(uint8_t r, uint8_t g, uint8_t b) {
 	return (color_t){r, g, b};
 }
 
-
 /**
  * Converts the vector data type to an integer color type.
  */

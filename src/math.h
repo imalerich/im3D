@@ -21,6 +21,16 @@ typedef struct bbox {
 bbox_t find_bbox(vector_t * v, unsigned count);
 
 /**
+ * Bounds 'box' within the context of 'within'.
+ */
+bbox_t intersect_bbox(bbox_t b0, bbox_t b1);
+
+/**
+ * Prints the input bounding box to the screen.
+ */
+void print_bbox(bbox_t b);
+
+/**
  * Computes the area of the input triangle.
  */
 float area_of_triangle(point_t t[3]);
