@@ -6,7 +6,7 @@
 
 #define WHITE make_color(255, 255, 255)
 #define LIGHT_GRAY make_color(180, 180, 180)
-#define DARK_GRAY make_color(80, 80, 80)
+#define DARK_GRAY make_color(20, 20, 20)
 #define BLACK make_color(0, 0, 0)
 
 #define RED make_color(255, 0, 0)

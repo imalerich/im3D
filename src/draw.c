@@ -59,12 +59,14 @@ void draw_triangle_frame(point_t t[3], color_t c, uint8_t * buffer, point_t buff
 }
 
 void draw_triangle(model_t * m, unsigned idx, 
-		vector_t (*shader)(shader_data_t data),
+		vector_t (*shader)(shader_data_t data, material_t * mat),
+		material_t * material,
 		uint8_t * buffer, float * back, point_t buffer_size) {
 	// get all relavent data out of the model
 	vector_t * vertices = &m->vertices[3*idx];
 	vector_t * tex_coords = &m->tex_coords[3*idx];
 	vector_t * norms = &m->norms[3*idx];
+	vector_t * tans = &m->tangents[3*idx];
 
 	// get the bounding box, clamped to screen coordinates
 	bbox_t screen_box = (bbox_t){{0, 0},buffer_size};
@@ -82,16 +84,17 @@ void draw_triangle(model_t * m, unsigned idx,
 				pos.z = (vertices[0].z * bc_screen.x) + 
 					(vertices[1].z * bc_screen.y) + (vertices[2].z * bc_screen.z);
 
-				if (back[y*buffer_size.x + x] >= pos.z) {
+				if (back[y*buffer_size.x + x] <= pos.z) {
 					continue;
 				}
 
 				// interpolate vertex data
 				vector_t tex_coord = interpolate(tex_coords, bc_screen);
 				vector_t norm = interpolate(norms, bc_screen);
+				vector_t tan = interpolate(tans, bc_screen);
 
 				back[y*buffer_size.x + x] = pos.z;
-				vector_t c = shader((shader_data_t){pos, tex_coord, norm});
+				vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
 				draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
 			}
 		}

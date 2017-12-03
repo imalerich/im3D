@@ -5,6 +5,7 @@
 #include "point.h"
 
 #define CHANNELS 3
+#define EMPTY_IMG {0, 0, NULL}
 
 typedef struct image {
 	int width;

@@ -15,7 +15,7 @@ uint8_t * malloc_buffer(unsigned width, unsigned height) {
 
 float * malloc_back_buffer(unsigned width, unsigned height) {
 	float * buffer = malloc(sizeof(float) * width * height);
-	for (int i=0; i<width*height; i++) { buffer[i] = -FLT_MAX; }
+	for (int i=0; i<width*height; i++) { buffer[i] = FLT_MAX; }
 	return buffer;
 }
 
@@ -28,7 +28,7 @@ image_t load_img(const char * name) {
 	int channels; // will be the number of channels actually present in the image
 	unsigned char * data = stbi_load(name, &ret.width, &ret.height, &channels, CHANNELS);
 	if (data == NULL) {
-		fprintf(stderr, "ERROR - Failed to load texture data.");
+		fprintf(stderr, "ERROR - Failed to load texture data.\n");
 		fflush(stderr);
 		exit(1);
 	}
@@ -47,13 +47,11 @@ void free_img(image_t * img) {
 
 vector_t sample_nearest(image_t img, float x, float y) {
 	// pick nearest and bind to rand -(width, height) to (width, height)
-	// int _x = (int)round(x * img.width) % img.width;
-	// int _y = (int)round(y * img.height) % img.height;
+	int _x = (int)round(x * img.width) % img.width;
+	int _y = (int)round(y * img.height) % img.height;
 	// // make sure we get something positive
-	// _x = (_x + img.width) % img.width;
-	// _y = (_y + img.width) % img.width;
-	int _x = x * img.width;
-	int _y = -y * img.height + img.height;
+	_x = (_x + img.width) % img.width;
+	_y = (_y + img.width) % img.width;
 	// convert to the absolute index into our texture buffer
 	int idx = (_y * img.width + _x) * CHANNELS; 
 

@@ -2,12 +2,28 @@
 #include "shaders.h"
 #include "math.h"
 
-image_t s_tex[MAX_TEXTURES];
+vector_t simple_shader(shader_data_t data, material_t * mat) {
+	vector_t LIGHT = vec_norm(make_vector(0, 0, 1, 0));
+	vector_t N = data.norm;
+	vector_t T = data.tan;
+	vector_t B = vec_scale(vec_cross(N, T), T.w);
+	vector_t sample = mat->diffuse;
 
-vector_t simple_shader(shader_data_t data) {
-	vector_t L = make_vector(0, 0, 1, 0);
-	float s = MAX(vec_dot(L, data.norm), 0.25);
-	vector_t sample = sample_nearest(s_tex[0], data.tex_coord.x, data.tex_coord.y);
+	// if we have a bump map, use it to modify the surface normal
+	if (mat->bump.data) {
+		// transform light into tangent space
+		LIGHT = make_vector(vec_dot(T, LIGHT), vec_dot(B, LIGHT), vec_dot(N, LIGHT), 0);
+		
+		vector_t bump = sample_nearest(mat->bump, data.tex_coord.x, data.tex_coord.y);
+		bump = vec_add(vec_scale(bump, 2.0), VECTOR_ONE);
+		N = vec_norm(bump);
+	}
 
-	return sample;
+	// if we have a texture, use it, otherwise use the specified diffuse value
+	if (mat->tex.data) {
+		sample = sample_nearest(mat->tex, data.tex_coord.x, data.tex_coord.y);
+	}
+
+	float diffuse = MAX(vec_dot(LIGHT, N), 0.0);
+	return vec_scale(sample, diffuse);
 }

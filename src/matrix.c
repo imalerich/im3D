@@ -83,9 +83,28 @@ matrix_t mat_trans_translate(vector_t trans) {
 	return m;
 }
 
-matrix_t mat_proj(float near) {
-	matrix_t m = mat_identity();
-	mat_set_val(&m, 3, 2, -1.0/near);
+// matrix_t mat_proj(float near) {
+// 	matrix_t m = mat_identity();
+// 	mat_set_val(&m, 3, 2, -1.0/near);
+// 	return m;
+// }
+
+matrix_t mat_proj(float n, float f, float width, float height) {
+	float l = -width/2.0;
+	float r = width/2.0;
+	float t = height/2.0;
+	float b = -height/2.0;
+
+	matrix_t m = mat_zero();
+	mat_set_val(&m, 0, 0, (2*n)/(r-l));
+	mat_set_val(&m, 1, 1, (2*n)/(t-b));
+	mat_set_val(&m, 2, 2, -(f+n)/(f-n));
+
+	mat_set_val(&m, 3, 2, -1);
+	mat_set_val(&m, 0, 2, (r+l)/(r-l));
+	mat_set_val(&m, 1, 2, (t+b)/(t-b));
+	mat_set_val(&m, 2, 3, -(2*n*f)/(f-n));
+
 	return m;
 }
 

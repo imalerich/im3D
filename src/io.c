@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "io.h"
 
 void strip_comments(char * line) {
@@ -11,6 +13,17 @@ void strip_comments(char * line) {
 
 		line[i] = found_comment ? '\0' : line[i];
 	}
+}
+
+char * trim_trailing_whitespace(char * line) {
+	size_t len = strlen(line);
+	for (unsigned i=len-1; i>0; i--) {
+		if (isspace(line[i])) {
+			line[i] = '\0';
+		}
+	}
+
+	return line;
 }
 
 bool is_vertex(char * line) {
@@ -47,6 +60,56 @@ bool is_face(char * line) {
 	return init == 'f' && isspace(last);
 }
 
+bool is_object_start(char * line) {
+	char init = get_initial_char(line++);
+	char last = *line++;
+
+	// a model declaration takes the form "o "
+	return init == 'o' && isspace(last);
+}
+
+char * read_string(const char * header, char * line) {
+	while (isspace(*line)) { line++; }
+	size_t h_length = strlen(header);
+	char sub[h_length+1]; memcpy(sub, line, h_length); sub[h_length] = '\0';
+	if (strcmp(sub, header) != 0) { return NULL; }
+
+	line += h_length;
+	while (isspace(*line)) { line++; }
+	size_t length = strlen(line);
+	char * ret = malloc(sizeof(char) * (length + 1));
+	memcpy(ret, line, length);
+	ret[length] = '\0';
+	return trim_trailing_whitespace(ret);
+}
+
+bool is_ambient(char * line) {
+	char init = get_initial_char(line++);
+	char next = *line++;
+	char last = *line;
+
+	// a texture coordinate takes the form "vt "
+	return init == 'K' && next == 'a' && isspace(last);
+}
+
+bool is_diffuse(char * line) {
+	char init = get_initial_char(line++);
+	char next = *line++;
+	char last = *line;
+
+	// a texture coordinate takes the form "vt "
+	return init == 'K' && next == 'd' && isspace(last);
+}
+
+bool is_specular(char * line) {
+	char init = get_initial_char(line++);
+	char next = *line++;
+	char last = *line;
+
+	// a texture coordinate takes the form "vt "
+	return init == 'K' && next == 's' && isspace(last);
+}
+
 vector_t get_vertex(char * line) {
 	// skip the line header
 	while (isspace(*line) || *line == 'v') { ++line; }
@@ -72,6 +135,16 @@ vector_t get_vertex_norm(char * line) {
 	float x, y, z;
 	sscanf(line, "%f %f %f", &x, &y, &z);
 	return make_vector(x, y, z, 0.0);
+}
+
+vector_t get_vector(char * line, unsigned skip) {
+	// skip the line header
+	while (isspace(*line) || *line == 'K' || *line == 'a') { ++line; }
+	line += skip;
+
+	float x, y, z;
+	sscanf(line, "%f %f %f", &x, &y, &z);
+	return make_vector(x, y, z, 1.0);
 }
 
 // utility for get_face

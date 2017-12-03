@@ -26,6 +26,12 @@ typedef struct obj_face {
 void strip_comments(char * line);
 
 /**
+ * Removes trailing whitespace from the input line.
+ * Returns the same pointer as was given for convenience.
+ */
+char * trim_trailing_whitespace(char * line);
+
+/**
  * Given a line from a .obj file, determines whether
  * or not the input line contains a vertex or not.
  */
@@ -50,11 +56,35 @@ bool is_vertex_norm(char * line);
 bool is_face(char * line);
 
 /**
- * Assumes is_vertex(line) == true. This
- * function will not perform this check.
- * Returns the vertex data stored in the given line.
+ * Given a line from a .obj file, determines whether
+ * or not the input line contains a model declaration.
  */
-vector_t get_vertex(char * line);
+bool is_object_start(char * line);
+
+/**
+ * First checks the start of the string to see if it matches
+ * header, if not this method returns NULL, else skip remaining
+ * white space then return the string stored in the rest of the line.
+ */
+char * read_string(const char * header, char * line);
+
+/**
+ * Determines whether or not the given line contains
+ * ambient lighting data.
+ */
+bool is_ambient(char * line);
+
+/**
+ * Determines whether or not the given line contains
+ * diffuse lighting data.
+ */
+bool is_diffuse(char * line);
+
+/**
+ * Determines whether or not the given line contains
+ * specular lighting data.
+ */
+bool is_specular(char * line);
 
 /**
  * Assumes is_texture_coord(line) == true. This
@@ -65,11 +95,10 @@ vector_t get_vertex(char * line);
 vector_t get_texture_coord(char * line);
 
 /**
- * Assumes is_vertex_norm(line) == true. This
- * function will not perform this check.
- * Returns the vertex normal stored in the given line.
+ * Returns vector data stored in the given line. Skips 'skip'
+ * characters following the first non-whitespace character.
  */
-vector_t get_vertex_norm(char * line);
+vector_t get_vector(char * line, unsigned skip);
 
 /**
  * Assume is_face(line) == true. This

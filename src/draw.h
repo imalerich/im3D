@@ -1,6 +1,7 @@
 #ifndef DRAW_H
 #define DRAW_H
 
+#include "material.h"
 #include "shaders.h"
 #include "color.h"
 #include "point.h"
@@ -33,7 +34,8 @@ void draw_triangle_frame(point_t t[3], color_t c, uint8_t * buffer, point_t buff
  * Assumes vertices have already been transformed.
  */
 void draw_triangle(model_t * m, unsigned idx, 
-	vector_t (*shader)(shader_data_t data),
+	vector_t (*shader)(shader_data_t data, material_t * mat),
+	material_t * material,
 	uint8_t * buffer, float * back, point_t buffer_size);
 
 #endif

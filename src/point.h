@@ -3,8 +3,16 @@
 
 #include <math.h>
 
+#ifndef MIN
+#define MIN(a, b) (a < b ? a : b)
+#endif
+#ifndef MAX
+#define MAX(a, b) (a > b ? a : b)
+#endif
+
 #define POINT_ZERO make_point(0, 0)
 #define VECTOR_ZERO make_vector(0, 0, 0, 0)
+#define VECTOR_ONE make_vector(1, 1, 1, 1)
 
 typedef struct point {
 	int x;
@@ -49,7 +57,7 @@ static inline point_t vector_to_point(vector_t v) {
 /**
  * Perform vector vector addition.
  */
-static inline vector_t vector_add(vector_t v0, vector_t v1) {
+static inline vector_t vec_add(vector_t v0, vector_t v1) {
 	return make_vector(
 		v0.x + v1.x, 
 		v0.y + v1.y,
@@ -61,8 +69,22 @@ static inline vector_t vector_add(vector_t v0, vector_t v1) {
 /**
  * Perform vector scalar multiplication.
  */
-static inline vector_t vector_scale(vector_t v, float s) {
+static inline vector_t vec_scale(vector_t v, float s) {
 	return make_vector(v.x * s, v.y * s, v.z * s, v.w * s);
+}
+
+/**
+ * Component wise vector multiplication.
+ */
+static inline vector_t vec_mul(vector_t v0, vector_t v1) {
+	return make_vector(v0.x * v1.x, v0.y * v1.y, v0.z * v1.z, v0.w * v1.w);
+}
+
+/**
+ * Creates a new vector by performing a component wise minimum operator.
+ */
+static inline vector_t vec_min(vector_t v0, vector_t v1) {
+	return make_vector(MIN(v0.x, v1.x), MIN(v0.y, v1.y), MIN(v0.z, v1.z), MIN(v0.w, v1.w));
 }
 
 /**

@@ -109,8 +109,11 @@ matrix_t mat_trans_translate(vector_t trans);
 
 /**
  * Creates a projection matrix with the given near plane distance.
+ * The first two parameters are the distances of the near and far plane.
+ * The width parameter determines the width of the near plane.
+ * The height parameter determines the height of the near plane.
  */
-matrix_t mat_proj(float near);
+matrix_t mat_proj(float near, float far, float width, float height);
 
 /**
  * Reads a row of the input matrix and returns it as a vector.
