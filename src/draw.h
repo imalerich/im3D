@@ -7,6 +7,8 @@
 #include "point.h"
 #include "model.h"
 
+extern unsigned thread_count;
+
 /**
  * Clears the input buffer to the given color.
  */

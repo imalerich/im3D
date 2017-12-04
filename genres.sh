@@ -8,32 +8,39 @@
 make
 
 # Create the output file (if necessary) and wipe it.
-OUT="$1.m"
+OUT="time/$1.m"
 > $OUT
 
-echo "function $0
+echo "function $1
 clear all;
 close all;
 hold on;
 
-x = [44115 61152 113955 596682];
+x = [1 2 4 8 16];
 " >> $OUT
 
-for THREAD_COUNT in 1 2 4 8 16
+MODELS=("models/war.obj" "models/dragon.obj" "models/blackdragon.obj" "models/ironman.obj")
+
+IDX=0
+for MODEL in ${MODELS[@]}
 do
-	printf "t$THREAD_COUNT = [ " >> $OUT
-	for MODEL in "models/war.obj" "models/dragon.obj" "models/blackdragon.obj" "models/ironman.obj"
+	printf "t$IDX = [ " >> $OUT
+	for THREAD_COUNT in 1 2 4 8 16
 	do
-		echo $THREAD_COUNT $MODEL | xargs ./im3D
+		echo "$THREAD_COUNT $MODEL --- BEGIN"
+		echo $THREAD_COUNT $MODEL | xargs ./im3D >> $OUT
+		echo "$THREAD_COUNT $MODEL --- END"
 	done
 	printf "];\n" >> $OUT
 
-	printf "plot(x, t$THREAD_COUNT, 'LineWidth', 3, 'DisplayName', '$THREAD_COUNT thread(s)');\n" >> $OUT
+	printf "plot(x, t$IDX, 'LineWidth', 3, 'DisplayName', '$MODEL 3840x2160');\n" >> $OUT
+	IDX=$((IDX+1))
 done
 
+
 echo "
-title('$1');
-xlabel('Number of Vertices');
-ylabel('Vertex Transformation Time');
+title('Personal');
+xlabel('Number of Threads');
+ylabel('Render Time');
 legend('show', 'Location', 'NorthWest');
 " >> $OUT

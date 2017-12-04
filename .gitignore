@@ -3,3 +3,5 @@ im3D
 *.swp
 *.png
 *.m
+*callgrind*
+*vgcore*

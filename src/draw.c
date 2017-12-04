@@ -1,10 +1,13 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <omp.h>
 
 #include "buffer.h"
 #include "math.h"
 #include "draw.h"
+
+unsigned thread_count = 0;
 
 void draw_clear(color_t c, uint8_t * buffer, point_t buffer_size) {
 	for (int y=0; y<buffer_size.y; y++) {
@@ -77,11 +80,12 @@ void draw_triangle(model_t * m, unsigned idx,
 	// this will allow us to use a single for loop
 	// to iterate over pixels, which should be a little 
 	// more efficient especially with OpenMP
-	const unsigned width = bbox.max.x - bbox.min.x;
-	const unsigned height = bbox.max.y - bbox.min.y;
-	const unsigned count = width * height;
+	const int width = bbox.max.x - bbox.min.x;
+	const int height = bbox.max.y - bbox.min.y;
+	const int count = MAX(width * height, 0);
 
-	for (int idx = 0; i < count; i++) {
+	#pragma omp parallel for num_threads(thread_count)
+	for (int idx = 0; idx < count; idx++) {
 		int x = (idx % width) + bbox.min.x;
 		int y = (idx / width) + bbox.min.y;
 
@@ -94,19 +98,16 @@ void draw_triangle(model_t * m, unsigned idx,
 			pos.z = (vertices[0].z * bc_screen.x) + 
 				(vertices[1].z * bc_screen.y) + (vertices[2].z * bc_screen.z);
 
-			#pragma omp critical
-			{
-				if (back[y*buffer_size.x + x] > pos.z) {
-					back[y*buffer_size.x + x] = pos.z;
+			if (back[y*buffer_size.x + x] > pos.z) {
+				back[y*buffer_size.x + x] = pos.z;
 
-					// interpolate vertex data
-					vector_t tex_coord = interpolate(tex_coords, bc_screen);
-					vector_t norm = interpolate(norms, bc_screen);
-					vector_t tan = interpolate(tans, bc_screen);
+				// interpolate vertex data
+				vector_t tex_coord = interpolate(tex_coords, bc_screen);
+				vector_t norm = interpolate(norms, bc_screen);
+				vector_t tan = interpolate(tans, bc_screen);
 
-					vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
-					draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
-				}
+				vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
+				draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
 			}
 		}
 	}
