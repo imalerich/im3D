@@ -84,7 +84,7 @@ void draw_triangle(model_t * m, unsigned idx,
 	const int height = bbox.max.y - bbox.min.y;
 	const int count = MAX(width * height, 0);
 
-	#pragma omp parallel for num_threads(thread_count) proc_bind(close)
+	#pragma omp parallel for num_threads(thread_count)
 	for (int idx = 0; idx < count; idx++) {
 		int x = (idx % width) + bbox.min.x;
 		int y = (idx / width) + bbox.min.y;

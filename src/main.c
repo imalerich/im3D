@@ -44,7 +44,7 @@ int main(int argc, char ** argv) {
 	for (unsigned k=0; k<models.model_count; k++) {
 		model_t m = models.models[k];
 
-		#pragma omp parallel for num_threads(thread_count) proc_bind(close)
+		#pragma omp parallel for num_threads(thread_count)
 		for (int i=0; i<m.vert_count; i++) {
 			transform_vertex(&m.vertices[i], &proj, WIDTH, HEIGHT);
 		}
