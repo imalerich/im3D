@@ -1,7 +1,6 @@
 im3D
 *.o
 *.swp
-*.png
-*.m
+out.png
 *callgrind*
 *vgcore*
