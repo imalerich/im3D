@@ -22,21 +22,12 @@ const unsigned HEIGHT = 2160;
 int main(int argc, char ** argv) {
 	srand(time(NULL));
 
-	omp_set_num_threads(4);
-	int thread_count = 4;
-	#pragma omp parallel for num_threads(thread_count)
-	for (int i=0; i<16; i++) {
-		int tid = omp_get_num_threads();
-		printf("thread_count = %d\n", tid);
-		fflush(stdout);
-	}
-
 	// --- SETUP --- //
 
 	uint8_t * buffer = malloc_buffer(WIDTH, HEIGHT);
 	float * back_buffer = malloc_back_buffer(WIDTH, HEIGHT);
 
-	const char * obj_file = "models/war.obj";
+	const char * obj_file = "models/ironman.obj";
 	model_group_t models = obj_load(obj_file);
 	matrix_t proj = mat_proj(1.0, 100.0, NEAR_WIDTH, NEAR_HEIGHT);
 
@@ -48,19 +39,14 @@ int main(int argc, char ** argv) {
 	for (unsigned k=0; k<models.model_count; k++) {
 		model_t m = models.models[k];
 
-		#pragma omp parallel for num_threads(4)
-		for (unsigned i=0; i<m.vert_count; i++) {
-			int tid = omp_get_thread_num();
-			if (tid != 0) {
-				printf("thread_id = %d\n", tid);
-				fflush(stdout);
-			}
-			transform_vertex(&m.vertices[i], &proj, WIDTH, HEIGHT);
-		}
+		#pragma omp parallel for num_threads(16)
+		for (int i=0; i<num_faces(m); i++) {
+			transform_vertex(&m.vertices[3*i + 0], &proj, WIDTH, HEIGHT);
+			transform_vertex(&m.vertices[3*i + 1], &proj, WIDTH, HEIGHT);
+			transform_vertex(&m.vertices[3*i + 2], &proj, WIDTH, HEIGHT);
 
-		// for (int i=0; i<num_faces(m); i++) {
-		// 	draw_triangle(&m, i, simple_shader, m.material, buffer, back_buffer, SIZE);
-		// }
+		 	draw_triangle(&m, i, simple_shader, m.material, buffer, back_buffer, SIZE);
+		}
 	}
 
 	double duration = omp_get_wtime() - start;

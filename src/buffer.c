@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <float.h>
 #include <math.h>
 #include "buffer.h"
 
@@ -15,7 +14,7 @@ uint8_t * malloc_buffer(unsigned width, unsigned height) {
 
 float * malloc_back_buffer(unsigned width, unsigned height) {
 	float * buffer = malloc(sizeof(float) * width * height);
-	for (int i=0; i<width*height; i++) { buffer[i] = FLT_MAX; }
+	clear_back_buffer(buffer, width, height);
 	return buffer;
 }
 

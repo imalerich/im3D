@@ -2,6 +2,7 @@
 #define BUFFER_H
 
 #include <stdint.h>
+#include <float.h>
 #include "point.h"
 
 #define CHANNELS 3
@@ -25,6 +26,13 @@ uint8_t * malloc_buffer(unsigned width, unsigned height);
  * This will allocate an array of width*height floating point values.
  */
 float * malloc_back_buffer(unsigned width, unsigned height);
+
+/**
+ * Clear the input back buffer to FLT_MAX.
+ */
+static inline void clear_back_buffer(float * buffer, unsigned width, unsigned height) {
+	for (int i=0; i<width*height; i++) { buffer[i] = FLT_MAX; }
+}
 
 /**
  * Saves a new png file at the given 'name' using

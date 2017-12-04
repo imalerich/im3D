@@ -84,20 +84,22 @@ void draw_triangle(model_t * m, unsigned idx,
 				pos.z = (vertices[0].z * bc_screen.x) + 
 					(vertices[1].z * bc_screen.y) + (vertices[2].z * bc_screen.z);
 
-				if (back[y*buffer_size.x + x] <= pos.z) {
-					continue;
-				} else {
-					back[y*buffer_size.x + x] = pos.z;
+				#pragma omp critical
+				{
+					if (back[y*buffer_size.x + x] > pos.z) {
+						back[y*buffer_size.x + x] = pos.z;
+
+						// interpolate vertex data
+						vector_t tex_coord = interpolate(tex_coords, bc_screen);
+						vector_t norm = interpolate(norms, bc_screen);
+						vector_t tan = interpolate(tans, bc_screen);
+
+						vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
+						draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
+					}
 				}
-
-				// interpolate vertex data
-				vector_t tex_coord = interpolate(tex_coords, bc_screen);
-				vector_t norm = interpolate(norms, bc_screen);
-				vector_t tan = interpolate(tans, bc_screen);
-
-				vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
-				draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
 			}
 		}
 	}
 }
+
