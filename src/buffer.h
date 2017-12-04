@@ -57,4 +57,11 @@ void free_img(image_t * img);
  */
 vector_t sample_nearest(image_t img, float x, float y);
 
+/**
+ * Produces 4 samples using sample_nearest and the floor/ceil
+ * of x and y. Then interpolates those 4 values based on x and y
+ * for smoother texture mapping.
+ */
+vector_t sample_linear(image_t img, float x, float y);
+
 #endif

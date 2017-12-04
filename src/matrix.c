@@ -1,8 +1,11 @@
-#include <limits.h>
+#include <omp.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include "matrix.h"
 #include "math.h"
+
+double MAT_TOTAL_TIME = 0.0;
 
 matrix_t mat_trans_scale(float s) {
 	matrix_t m = mat_identity();
@@ -83,12 +86,6 @@ matrix_t mat_trans_translate(vector_t trans) {
 	return m;
 }
 
-// matrix_t mat_proj(float near) {
-// 	matrix_t m = mat_identity();
-// 	mat_set_val(&m, 3, 2, -1.0/near);
-// 	return m;
-// }
-
 matrix_t mat_proj(float n, float f, float width, float height) {
 	float l = -width/2.0;
 	float r = width/2.0;
@@ -120,13 +117,24 @@ vector_t get_col(matrix_t * m, unsigned col) {
 matrix_t mat_multiply(matrix_t * m0, matrix_t * m1) {
 	vector_t r[MAT_DIMM];
 	vector_t c[MAT_DIMM];
+	matrix_t m;
 
 	for (int i=0; i<MAT_DIMM; i++) {
 		r[i] = get_row(m0, i);
 		c[i] = get_col(m1, i);
 	}
 
-	matrix_t m;
+#ifdef __PAR_MAT_MUL__
+
+	#pragma omp parallel for num_threads(16)
+	for (int k=0; k<MAT_SIZE; k++) {
+		int i = k/4;
+		int j = k%4;
+		m.data[k] = vec_dot(r[i], c[j]);
+	}
+
+#else
+
 	for (int i=0; i<MAT_DIMM; i++) {
 		for (int j=0; j<MAT_DIMM; j++) {
 			// the value is computed by taking the dot product
@@ -134,6 +142,8 @@ matrix_t mat_multiply(matrix_t * m0, matrix_t * m1) {
 			mat_set_val(&m, i, j, vec_dot(r[i], c[j]));
 		}
 	}
+
+#endif
 
 	return m;
 }

@@ -67,3 +67,17 @@ vector_t bary_centric(vector_t p, vector_t t[3]) {
 		return make_vector(1.0 - (u.x + u.y)/u.z, u.y/u.z, u.x/u.z, 0);
 	}
 }
+
+void transform_vertex(vector_t * v, matrix_t * proj, unsigned width, unsigned height) {
+	const static vector_t offset = (const vector_t){1.0f, 1.0f, 0.0f, 0.0f};
+	vector_t tmp = mat_vec_multiply(proj, *v);
+
+	tmp.y = -tmp.y;
+	tmp = vec_scale(tmp, 1.0 / tmp.w);
+	tmp = vec_add(tmp, offset);
+	tmp = vec_scale(tmp, 0.5);
+	tmp.x = tmp.x * width;
+	tmp.y = tmp.y * height;
+
+	*v = tmp;
+}

@@ -21,7 +21,7 @@ vector_t simple_shader(shader_data_t data, material_t * mat) {
 
 	// if we have a texture, use it, otherwise use the specified diffuse value
 	if (mat->tex.data) {
-		sample = sample_nearest(mat->tex, data.tex_coord.x, data.tex_coord.y);
+		sample = sample_linear(mat->tex, data.tex_coord.x, data.tex_coord.y);
 	}
 
 	float diffuse = MAX(vec_dot(LIGHT, N), 0.0);

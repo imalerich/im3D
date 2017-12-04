@@ -52,4 +52,9 @@ bool is_point_in_triangle(vector_t p, vector_t t[3]);
  */
 vector_t bary_centric(vector_t p, vector_t t[3]);
 
+/**
+ * Applies the projection transformation on the input vertex.
+ */
+void transform_vertex(vector_t * v, matrix_t * proj, unsigned width, unsigned height);
+
 #endif
