@@ -73,30 +73,39 @@ void draw_triangle(model_t * m, unsigned idx,
 	bbox_t bbox = find_bbox(vertices, 3);
 	bbox = intersect_bbox(bbox, screen_box);
 
-	for (int y = bbox.min.y; y <= bbox.max.y; y++) {
-		for (int x = bbox.min.x; x <= bbox.max.x; x++) {
-			vector_t pos = make_vector(x, y, 0, 0);
+	// get some basic information about the bounding box
+	// this will allow us to use a single for loop
+	// to iterate over pixels, which should be a little 
+	// more efficient especially with OpenMP
+	const unsigned width = bbox.max.x - bbox.min.x;
+	const unsigned height = bbox.max.y - bbox.min.y;
+	const unsigned count = width * height;
 
-			if (is_point_in_triangle(pos, vertices)) {
-				// compute bary centric coordinates, we will need this for our depth test
-				vector_t bc_screen = bary_centric(make_vector(x,y, 0.0, 0.0), vertices);
-				if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0) { continue; }
-				pos.z = (vertices[0].z * bc_screen.x) + 
-					(vertices[1].z * bc_screen.y) + (vertices[2].z * bc_screen.z);
+	for (int idx = 0; i < count; i++) {
+		int x = (idx % width) + bbox.min.x;
+		int y = (idx / width) + bbox.min.y;
 
-				#pragma omp critical
-				{
-					if (back[y*buffer_size.x + x] > pos.z) {
-						back[y*buffer_size.x + x] = pos.z;
+		vector_t pos = make_vector(x, y, 0, 0);
 
-						// interpolate vertex data
-						vector_t tex_coord = interpolate(tex_coords, bc_screen);
-						vector_t norm = interpolate(norms, bc_screen);
-						vector_t tan = interpolate(tans, bc_screen);
+		if (is_point_in_triangle(pos, vertices)) {
+			// compute bary centric coordinates, we will need this for our depth test
+			vector_t bc_screen = bary_centric(make_vector(x,y, 0.0, 0.0), vertices);
+			if (bc_screen.x < 0 || bc_screen.y < 0 || bc_screen.z < 0) { continue; }
+			pos.z = (vertices[0].z * bc_screen.x) + 
+				(vertices[1].z * bc_screen.y) + (vertices[2].z * bc_screen.z);
 
-						vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
-						draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
-					}
+			#pragma omp critical
+			{
+				if (back[y*buffer_size.x + x] > pos.z) {
+					back[y*buffer_size.x + x] = pos.z;
+
+					// interpolate vertex data
+					vector_t tex_coord = interpolate(tex_coords, bc_screen);
+					vector_t norm = interpolate(norms, bc_screen);
+					vector_t tan = interpolate(tans, bc_screen);
+
+					vector_t c = shader((shader_data_t){pos, tex_coord, norm, tan}, material);
+					draw_point(vector_to_point(pos), vector_to_color(c), buffer, buffer_size);
 				}
 			}
 		}
