@@ -152,6 +152,7 @@ model_group_t obj_load(const char * filename) {
 	}
 
 	// free all our buffers, close the file, and return results
+	free(model_buffer);
 	free(v_buffer);
 	free(t_buffer);
 	free(n_buffer);
@@ -217,12 +218,14 @@ void model_free(model_t * m) {
 	free(m->vertices);
 	free(m->tex_coords);
 	free(m->norms);
+	free(m->tangents);
 	material_free(m->material);
 
 	m->material = NULL;
 	m->material = NULL;
 	m->vertices = NULL;
 	m->tex_coords = NULL;
+	m->tangents = NULL;
 	m->norms = NULL;
 }
 
