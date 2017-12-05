@@ -19,8 +19,8 @@ hold on;
 x = [1 2 4 8 16];
 " >> $OUT
 
-# MODELS=("models/war.obj" "models/dragon.obj" "models/blackdragon.obj" "models/ironman.obj")
-MODELS=("models/ironman.obj")
+MODELS=("models/war.obj" "models/dragon.obj" "models/blackdragon.obj" "models/ironman.obj")
+# MODELS=("models/ironman.obj")
 
 IDX=0
 for MODEL in ${MODELS[@]}
