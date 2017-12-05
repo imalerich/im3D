@@ -69,7 +69,7 @@ vector_t bary_centric(vector_t p, vector_t t[3]) {
 }
 
 void transform_vertex(vector_t * v, matrix_t * proj, unsigned width, unsigned height) {
-	const static vector_t offset = (const vector_t){1.0f, 1.0f, 0.0f, 0.0f};
+	vector_t offset = (vector_t){1.0f, 1.0f, 0.0f, 0.0f};
 	vector_t tmp = mat_vec_multiply(proj, *v);
 
 	tmp.y = -tmp.y;

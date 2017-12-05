@@ -1,4 +1,4 @@
-GXX = gcc
+GXX = gcc -std=c11
 BIN = im3D
 HEAD =	src/buffer.h src/color.h src/point.h  \
 		src/draw.h src/math.h src/io.h src/matrix.h  \
