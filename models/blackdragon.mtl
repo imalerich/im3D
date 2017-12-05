@@ -10,5 +10,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /home/imalerich/dev/im3D/tex/Dragon_Nor.jpg
-map_Bump /home/imalerich/dev/im3D/tex/Dragon_bump.jpg
+map_Kd ./tex/Dragon_Nor.jpg
+map_Bump ./tex/Dragon_bump.jpg
