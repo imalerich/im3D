@@ -40,7 +40,7 @@ done
 
 
 echo "
-title('Personal');
+title('hpc-class');
 xlabel('Number of Threads');
 ylabel('Render Time');
 legend('show', 'Location', 'NorthWest');
