@@ -18,3 +18,8 @@ im3D NUM_THREADS MODEL_NAME
 Running 'make run' executes the following, which renders war using 4 threads. 
 
 ./im3D 4 models/war.obj
+
+## Sample Renders
+
+- [alt tag](https://raw.githubusercontent.com/imalerich/im3D/master/samples/war.png)
+- [alt tag](https://raw.githubusercontent.com/imalerich/im3D/master/samples/dragon.png)
