@@ -21,5 +21,5 @@ Running 'make run' executes the following, which renders war using 4 threads.
 
 ## Sample Renders
 
-- [alt tag](https://raw.githubusercontent.com/imalerich/im3D/master/samples/war.png)
-- [alt tag](https://raw.githubusercontent.com/imalerich/im3D/master/samples/dragon.png)
+![alt tag](https://raw.githubusercontent.com/imalerich/im3D/master/samples/war.png)
+![alt tag](https://raw.githubusercontent.com/imalerich/im3D/master/samples/dragon.png)
